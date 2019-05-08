@@ -23,7 +23,8 @@ Usage: translate [OPTIONS]
 
   Assumtions:
 
-      - Transcript names are unique
+      - Transcript names are unique in the transcript file
+      - Transcript names are not unique in the query file
       - Transcript files are of the form: transcript_name chromosome position cigar
       - Query files are of the form: transcript_name transcript_pos
       - Output is of the form: transcript_name query_pos chromosome genomic_pos

@@ -1,6 +1,6 @@
 import click
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 
 @dataclass
@@ -45,13 +45,13 @@ def translate(
     return None
 
 
-def parse_queries(query_path: str) -> Dict[str, Query]:
+def parse_queries(query_path: str) -> List[Query]:
     """Parse the queries out of the query file."""
-    queries: Dict[str, Query] = {}
+    queries: List[Query] = []
     with open(query_path, "r") as query_fh:
         for line in query_fh:
             vals = line.rstrip("\n").split("\t")
-            queries[vals[0]] = Query(vals[0], int(vals[1]))
+            queries.append(Query(vals[0], int(vals[1])))
     return queries
 
 
@@ -78,13 +78,14 @@ def main(transcript_file: str, query_file: str):
     Assumtions:
 
     \b
-        - Transcript names are unique
+        - Transcript names are unique in the transcript file
+        - Transcript names are not unique in the query file
         - Transcript files are of the form: transcript_name chromosome position cigar
         - Query files are of the form: transcript_name transcript_pos
         - Output is of the form: transcript_name query_pos chromosome genomic_pos
     """
     transcripts: Dict[str, Transcript] = parse_transcripts(transcript_file)
-    queries: Dict[str, Query] = parse_queries(query_file)
+    queries: List[Query] = parse_queries(query_file)
     for query in queries:
         translation = translate(query, transcripts)
     print(transcripts)
