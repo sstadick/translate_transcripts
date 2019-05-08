@@ -11,15 +11,23 @@ source ./venv/bin/activate
 pip install .
 ```
 
+## Run Tests
+
+```bash
+pip install pytest
+pytest
+```
+
 ## Running
 
 ```bash
-$ translate --help
+$ translate --help 
 Usage: translate [OPTIONS]
 
   Locate the genomic coordinates of queries based on the transcript file.
 
-  Both the transcript and query files are 0-based.
+  Both the transcript and query files are 0-based. When a value can't be
+  determined it is set to '*'.
 
   Assumtions:
 
@@ -35,8 +43,13 @@ Options:
   --help                      Show this message and exit.
 ```
 
+## Discussion
 
-## TODO
+### Design Choices
 
-- add pytest for translation
-- add cigar string parsing methods and tests
+### Bells and Whistles
+
+1. Handle transcripts mapping with reverse orientation:
+2. Map genomic coordinates onto transcript coordinates:
+3. Map transcript range onto a genomic range (or reverse). Transcript CIGAR onto a genomic CIGAR (or reverse):
+4. Where to get transcripts:

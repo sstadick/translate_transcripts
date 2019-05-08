@@ -2,7 +2,6 @@ import click
 from dataclasses import dataclass
 from itertools import groupby
 from operator import attrgetter
-from pprint import pprint
 from typing import Dict, Optional, List, Iterable, Tuple, Union
 
 
