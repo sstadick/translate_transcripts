@@ -54,15 +54,19 @@ The use of Dataclasses and Typing could also be questioned. I have found both to
 ### Bells and Whistles
 
 1. Handle transcripts mapping with reverse orientation:
+
     This has been implemented. Strandedness could be taken into account by adding a column to the transcripts file with a + or -. If the transcript is on the - strand, then the genomic pos would be incremented by -1, and the tx_pos would be incremented by +1. The extra column is optional and defaults to '+' when not present. This assumes that the genomic position in the transcripts file refers to the the '+' strand. 
 
 2. Map genomic coordinates onto transcript coordinates:
+
     Not implemented. This could be done using much the same framework that I have here. Outside of the code for accepting a differnt type of query file, the main difference would be the condition that breaks the loop inside the `translate` function. It would return once the genomic coordinate was reached.
 
 3. Map transcript range onto a genomic range (or reverse). Transcript CIGAR onto a genomic CIGAR (or reverse):
+
     Not implemented. Some syntax and conventions would need to be written down for parsing ranges, but at it's core we could probably just use the same `translate` function, run it twice, once for the start of the range, and once for the end of the range. 
 
     Regarding the cigar mappings, that should just be tracking the operations that are performed between the start and end of the ranges. This might get tricky. Off the top of my head I would do something like the `translate` function, walk the cigar, and pass in a start_record and end_record values to indcate what coordinates I want the recording to start and end at. 
 
 4. Where to get transcripts:
+
     I am not aware of any transcript databases that contain alignments as well as transcript information. I would try to ask around for this as I am not an expert in all things transcript related. However, if it came down to it, my DIY solution would be to pull a transcript database uscs's [knownGeneMrna](http://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/knownGeneMrna.txt.gz) that contains the mrna sequences. I would convert these to fastq format and align with a long read aligner such as STAR, or minimap2. Ths would provide me with a cigar string for each transcript against my reference of choice.
