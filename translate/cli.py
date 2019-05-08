@@ -21,6 +21,7 @@ class Transcript(object):
     chr: str
     genomic_pos: int
     cigar: str
+    strand: str = "+"
 
 
 @dataclass
@@ -88,8 +89,13 @@ def translate(query: Query, transcripts: Dict[str, Transcript]) -> Translation:
     tx_found = False
     for number, op in parse_cigar(tx.cigar):
         query_op, ref_op = CIGAR_OPS[op]
+        if tx.strand == "-":  # Handle transcripts that are on the reverse strand
+            ref_op = ref_op * -1
         for i in range(number):
-            if query.tx_pos == tx_pos:
+            if genomic_pos < 0:  # We can't go over the edge
+                tx_found = False
+                break
+            elif query.tx_pos == tx_pos:
                 tx_found = True
                 break
             genomic_pos += ref_op
@@ -118,7 +124,11 @@ def parse_transcripts(transcript_path: str) -> Dict[str, Transcript]:
     with open(transcript_path, "r") as trans_fh:
         for line in trans_fh:
             vals = line.rstrip("\n").split("\t")
-            transcripts[vals[0]] = Transcript(vals[0], vals[1], int(vals[2]), vals[3])
+            tx = Transcript(vals[0], vals[1], int(vals[2]), vals[3])
+            if len(vals) == 5:
+                tx.strand = vals[4]
+
+            transcripts[vals[0]] = tx
     return transcripts
 
 

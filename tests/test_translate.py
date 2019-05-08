@@ -13,6 +13,9 @@ transcripts = {
         tx_name="TR1", chr="CHR1", genomic_pos=3, cigar="8M7D6M2I2M11D7M"
     ),
     "TR2": Transcript(tx_name="TR2", chr="CHR2", genomic_pos=10, cigar="20M"),
+    "TR3": Transcript(
+        tx_name="TR3", chr="CHR2", genomic_pos=10, cigar="10M", strand="-"
+    ),
     "TR4": Transcript(tx_name="TR4", chr="CHR3", genomic_pos=100, cigar="20M5D"),
 }
 queries = [
@@ -20,6 +23,8 @@ queries = [
     Query(tx_name="TR2", tx_pos=0),
     Query(tx_name="TR1", tx_pos=13),
     Query(tx_name="TR2", tx_pos=10),
+    Query(tx_name="TR3", tx_pos=6),
+    Query(tx_name="TR3", tx_pos=11),  # Verify that we can't go over chromosome edge
     Query(
         tx_name="TR5", tx_pos=2
     ),  # Test for a transcript name that isn't in transcripts
@@ -32,6 +37,8 @@ translations = [
     Translation(tx_name="TR2", tx_pos=0, chr="CHR2", genomic_pos=10),
     Translation(tx_name="TR1", tx_pos=13, chr="CHR1", genomic_pos=23),
     Translation(tx_name="TR2", tx_pos=10, chr="CHR2", genomic_pos=20),
+    Translation(tx_name="TR3", tx_pos=6, chr="CHR2", genomic_pos=4),
+    Translation(tx_name="TR3", tx_pos=11, chr="CHR2", genomic_pos="*"),
     Translation(tx_name="TR5", tx_pos=2, chr="*", genomic_pos="*"),
     Translation(tx_name="TR4", tx_pos=100, chr="CHR3", genomic_pos="*"),
 ]
